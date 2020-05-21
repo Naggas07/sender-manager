@@ -1,7 +1,7 @@
 require("dotenv");
 
 module.exports = {
-  database: "sender-manager",
+  database: "senderManager",
   username: process.env.USERDATABASE,
   password: process.env.PASSWORDDATABASE,
   params: {
