@@ -1,36 +1,17 @@
 const { Sequelize } = require("sequelize");
-const path = require("path");
-const fs = require("fs");
 const dataConfig = require("./connectionConfig");
 
-let db = null;
+const sequelize = new Sequelize(
+  dataConfig.database,
+  dataConfig.username,
+  dataConfig.password,
+  dataConfig.params
+);
 
-module.exports = (connection) => {
-  if (!db) {
-    const sequelize = new Sequelize(
-      dataConfig.database,
-      dataConfig.username,
-      dataConfig.password,
-      dataConfig.params
-    );
+//models
+const userModel = require("../models/userModel");
 
-    db = {
-      sequelize,
-      Sequelize,
-      models: {},
-    };
+//update Models
+const User = userModel(sequelize, Sequelize);
 
-    const models = path.join(__dirname, "models");
-    fs.readFileSync(models).map((file) => {
-      const fileDir = path.join(models, file);
-      const model = sequelize.import(fileDir);
-      db.models[model.name] = model;
-    });
-
-    Object.keys(db.models).map((model) => {
-      db.models[model].associate(db.models);
-    });
-  }
-
-  return db;
-};
+sequelize.sync();

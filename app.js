@@ -9,7 +9,6 @@ const cookieParser = require("cookie-parser");
  */
 require("./config/db.config");
 const session = require("./config/session.config");
-
 const app = express();
 
 app.use(logger("dev"));
@@ -22,6 +21,12 @@ app.use((req, res, next) => {
   req.currentUser = req.session.user;
   next();
 });
+
+// import routes
+const userRoutes = require("./routes/user.routes");
+
+//use routes
+app.use("/user", userRoutes);
 
 /**
  * Listen on provided port
